@@ -1,8 +1,18 @@
+import java.util.Arrays;
+import java.util.List;
+
 public class ShippingCostCalculator {
-    double cost(Shipment s){
-        if ("STANDARD".equals(s.type)) return 50 + 5*s.weightKg;
-        if ("EXPRESS".equals(s.type))  return 80 + 8*s.weightKg;
-        if ("OVERNIGHT".equals(s.type))return 120 + 10*s.weightKg;
-        throw new IllegalArgumentException("Unknown type: " + s.type);
+    private final List<IShipping> shipping = Arrays.asList(
+        new StandardShipping(),
+        new ExpressShipping(),
+        new OvernightShipping()
+    );
+
+    public double cost(Shipment s) {
+        return shipping.stream()
+            .filter(sh -> sh.supports(s.type))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unknown type: " + s.type))
+            .cost(s);
     }
 }

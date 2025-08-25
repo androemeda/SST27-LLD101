@@ -1,11 +1,19 @@
+import java.util.Arrays;
+import java.util.List;
 
 public class PaymentService {
-    String pay(Payment p){
-        switch (p.provider) {
-            case "CARD": return "Charged card: " + p.amount;
-            case "UPI":  return "Paid via UPI: " + p.amount;
-            case "WALLET": return "Wallet debit: " + p.amount;
-            default: throw new RuntimeException("No provider");
-        }
+
+    private List<IPaymentMethod> providers = Arrays.asList(
+        new UPIPayment(),
+        new CardPayment(),
+        new WalletPayment()
+    );
+    
+    public String pay(Payment p){
+        return providers.stream()
+        .filter(pr -> pr.supports(p.provider))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("No provider"))
+        .pay(p);
     }
 }

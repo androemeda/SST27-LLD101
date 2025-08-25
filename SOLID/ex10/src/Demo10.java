@@ -1,5 +1,6 @@
 public class Demo10 {
     public static void main(String[] args) {
-        new ReportService().generate();
+        ReportService reportService = Configs.reportService;
+        reportService.generate();
     }
 }

@@ -1,7 +1,12 @@
 public class ReportService {
-    void generate(){
-        ConsoleLogger logger = new ConsoleLogger();
-        logger.log("Generating daily report...");
+    private Logger logger;
+
+    public ReportService(Logger logger) {
+        this.logger = logger;
+    }
+
+    public void generate() {
+        this.logger.log("Generating daily report...");
         System.out.println("Report contents...");
     }
 }
