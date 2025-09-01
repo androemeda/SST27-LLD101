@@ -10,23 +10,30 @@ import java.util.Properties;
  * not thread-safe, reload allowed anytime, mutable global state, reflection+serialization-friendly.
  */
 public class AppSettings implements Serializable {
-    private final Properties props = new Properties();
+      private final Properties props = new Properties();
 
-    public AppSettings() { } // should not be public for true singleton
+      private static final AppSettings INSTANCE = new AppSettings();
 
-    public static AppSettings getInstance() {
-        return new AppSettings(); // returns a fresh instance (bug)
-    }
+      //Private constructor
+      private AppSettings() {
+        // Load the default config file during initialization
+        String configFile = System.getProperty("config.file", "app.properties");
+        loadFromFile(Path.of(configFile));
+      }
 
-    public void loadFromFile(Path file) {
-        try (InputStream in = Files.newInputStream(file)) {
-            props.load(in);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+      public static AppSettings getInstance() {
+          return INSTANCE;
+      }
+
+      public String get(String key) {
+          return props.getProperty(key);
+      }
+
+       private void loadFromFile(Path file) {
+            try (InputStream in = Files.newInputStream(file)) {
+                props.load(in);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         }
-    }
-
-    public String get(String key) {
-        return props.getProperty(key);
-    }
-}
+  }
