@@ -1,15 +1,16 @@
 package com.example.imports;
 
 import java.nio.file.Path;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        if (args.length == 0) throw new IllegalArgumentException("path required");
-        Path csv = Path.of(args[0]);
+        Path csv = Path.of("com/example/imports/sample_users.csv");
+
         // TODO: Implement and use CsvProfileImporter here
-        // ProfileImporter importer = new CsvProfileImporter(new NaiveCsvReader(), new ProfileService());
-        // int n = importer.importFrom(csv);
-        // System.out.println("Imported " + n + " profiles");
-        System.out.println("Import OK (wire the adapter to complete).");
+        ProfileImporter importer = new CsvProfileImporter(new NaiveCsvReader(), new ProfileService());
+        System.out.println();
+        int n = importer.importFrom(csv);
+        System.out.println("\nImported " + n + " profiles");
     }
 }
