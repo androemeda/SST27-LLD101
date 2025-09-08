@@ -12,28 +12,32 @@ public class GameDemo {
         base.move();
         base.attack();
 
-        // === YOUR TASKS ===
-        // 1) Create CharacterDecorator that implements Character and wraps another Character.
-        // 2) Create concrete decorators, for example:
-        //      - SpeedBoost (adds +N to speed, overrides getSpeed() and move() print)
-        //      - DamageBoost (adds +N to damage, overrides getDamage() and attack() print)
-        //      - GoldenAura (changes sprite, small buffs, logs aura on actions)
-        // 3) Show composition:
-        //      a) Base + SpeedBoost + DamageBoost
-        //      b) Add GoldenAura (sprite change + buffs)
-        //      c) Remove GoldenAura by recomposing (rebuild chain without it)
-        //
-        // Example (after you implement):
-        // Character buffed = new DamageBoost(new SpeedBoost(base, 3), 15);
-        // buffed.move();
-        // buffed.attack();
-        //
-        // Character shiny = new GoldenAura(buffed);
-        // shiny.move();
-        // shiny.attack();
-        //
-        // Character withoutAura = buffed; // removal by recomposition
-        // withoutAura.move();
-        // withoutAura.attack();
+        // === COMPOSITION EXAMPLES ===
+        
+        // a) Base + SpeedBoost + DamageBoost
+        System.out.println("\n--- Base + SpeedBoost(3) + DamageBoost(15) ---");
+        Character buffed = new DamageBoost(new SpeedBoost(base, 3), 15);
+        buffed.move();
+        buffed.attack();
+        
+        // b) Add GoldenAura (sprite change + buffs)
+        System.out.println("\n--- Adding GoldenAura ---");
+        Character shiny = new GoldenAura(buffed);
+        shiny.move();
+        shiny.attack();
+        System.out.println("Speed: " + shiny.getSpeed() + ", Damage: " + shiny.getDamage() + ", Sprite: " + shiny.getSprite());
+        
+        // c) Remove GoldenAura by recomposing (rebuild chain without it)
+        System.out.println("\n--- Removing GoldenAura (recomposition) ---");
+        Character withoutAura = buffed; // reuse the previous composition without GoldenAura
+        withoutAura.move();
+        withoutAura.attack();
+        
+        // Additional example: Different composition order
+        System.out.println("\n--- Different composition: GoldenAura + SpeedBoost + DamageBoost ---");
+        Character differentOrder = new DamageBoost(new SpeedBoost(new GoldenAura(base), 5), 20);
+        differentOrder.move();
+        differentOrder.attack();
+        System.out.println("Speed: " + differentOrder.getSpeed() + ", Damage: " + differentOrder.getDamage() + ", Sprite: " + differentOrder.getSprite());
     }
 }
